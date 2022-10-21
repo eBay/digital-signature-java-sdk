@@ -1,0 +1,31 @@
+{
+  "digestAlgorithm": "sha-256",
+  "algorithm": "Ed25519",
+  "jweHeaderParams": {
+    "alg": "A256GCMKW",
+    "enc": "A256GCM",
+    "zip": "DEF"
+  },
+  "jwtExpiration": "3",
+  "jwtPayload": {
+    "pkey": "MCowBQYDK2VwAyEAJrQLj5P/89iXES9+vFgrIy29clF9CC/oPPsw3c5D0bs="
+  },
+  "masterKey": "./keys/masterkey.key",
+  "privateKey": "./keys/ed25519/privatekey.pem",
+  "publicKey": "./keys/ed25519/publickey.pem",
+  "signatureComponents": {
+    "method": "POST",
+    "authority": "api.sandbox.ebay.com",
+    "targetUri": "https://api.sandbox.ebay.com/ws/api.dll",
+    "path": "/ws/api.dll",
+    "scheme": "https",
+    "requestTarget": ""
+  },
+  "signatureParams": [
+    "content-digest",
+    "x-ebay-signature-key",
+    "@method",
+    "@path",
+    "@authority"
+  ]
+}
