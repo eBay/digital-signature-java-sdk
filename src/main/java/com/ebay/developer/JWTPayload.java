@@ -33,7 +33,7 @@ public class JWTPayload {
 
     /**
      * Set Public Key
-     * @param pkey
+     * @param pkey public key
      */
     public void setPkey(String pkey) {
         this.pkey = pkey;

@@ -27,7 +27,7 @@ public class JWEHeadersParam {
 
     /**
      * Get Algorithm
-     * @return algo
+     * @return algo algorithm
      */
     public String getAlg() {
         return alg;
@@ -35,7 +35,7 @@ public class JWEHeadersParam {
 
     /**
      * Set Algorithm
-     * @param alg
+     * @param alg algorithm
      */
     public void setAlg(String alg) {
         this.alg = alg;
@@ -43,7 +43,7 @@ public class JWEHeadersParam {
 
     /**
      * Get Encryption
-     * @return encryption
+     * @return encryption encryption method
      */
     public String getEnc() {
         return enc;
@@ -51,7 +51,7 @@ public class JWEHeadersParam {
 
     /**
      * Set Encryption
-     * @param enc
+     * @param enc encryption method
      */
     public void setEnc(String enc) {
         this.enc = enc;
@@ -59,7 +59,7 @@ public class JWEHeadersParam {
 
     /**
      * Get Compression method
-     * @return compression
+     * @return compression compression method
      */
     public String getZip() {
         return zip;
@@ -67,7 +67,7 @@ public class JWEHeadersParam {
 
     /**
      * Set Compression method
-     * @param zip
+     * @param zip compression method
      */
     public void setZip(String zip) {
         this.zip = zip;

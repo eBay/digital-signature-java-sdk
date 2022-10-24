@@ -47,10 +47,10 @@ public class SignatureService {
     /**
      * Generate Content Digest
      *
-     * @param body
-     * @param signatureConfig
-     * @return contentDigest
-     * @throws SignatureException
+     * @param body request body
+     * @param signatureConfig signature config
+     * @return contentDigest content digest
+     * @throws SignatureException signature exception
      */
     public String generateContentDigest(String body,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -83,8 +83,9 @@ public class SignatureService {
     /**
      * Generate Signature Key Header
      *
-     * @param signatureConfig
-     * @return signature key header
+     * @param signatureConfig signature config
+     * @return signature key
+     * @throws SignatureException signature exception
      */
     public String generateSignatureKeyHeader(SignatureConfig signatureConfig)
         throws SignatureException {
@@ -94,8 +95,8 @@ public class SignatureService {
     /**
      * Generate Signature Input header
      *
-     * @param contentDigest
-     * @param signatureParams
+     * @param contentDigest content digest
+     * @param signatureParams signature params
      * @return signatureInputHeader
      */
     public String getSignatureInput(String contentDigest, List<String> signatureParams) {
@@ -123,10 +124,10 @@ public class SignatureService {
     /**
      * Get 'Signature' header value
      *
-     * @param headers
-     * @param signatureConfig
-     * @return signature
-     * @throws SignatureException
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return signature signature
+     * @throws SignatureException signature exception
      */
     public String getSignature(Map<String, String> headers,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -157,8 +158,8 @@ public class SignatureService {
 
     /**
      * Get JWE value
-     * @param signatureConfig
-     * @return JWE
+     * @param signatureConfig signature config
+     * @return JWE JWE value
      * @throws SignatureException
      */
     String getJWE(SignatureConfig signatureConfig) throws SignatureException {
@@ -208,9 +209,9 @@ public class SignatureService {
     /**
      * Method to calculate base string value
      *
-     * @param headers
-     * @param signatureConfig
-     * @return calculatedBase
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return calculatedBase base string
      * @throws SignatureException
      */
      String calculateBase(Map<String, String> headers,

@@ -38,7 +38,7 @@ public class SignatureComponent {
 
     /**
      * Set Method type
-     * @param method
+     * @param method method type
      */
     public void setMethod(String method) {
         this.method = method;
@@ -54,7 +54,7 @@ public class SignatureComponent {
 
     /**
      * Set Authority
-     * @param authority
+     * @param authority authority
      */
     public void setAuthority(String authority) {
         this.authority = authority;
@@ -70,7 +70,7 @@ public class SignatureComponent {
 
     /**
      * Set Target URI
-     * @param targetUri
+     * @param targetUri target uri
      */
     public void setTargetUri(String targetUri) {
         this.targetUri = targetUri;
@@ -86,7 +86,7 @@ public class SignatureComponent {
 
     /**
      * Set Path
-     * @param path
+     * @param path path
      */
     public void setPath(String path) {
         this.path = path;
@@ -102,7 +102,7 @@ public class SignatureComponent {
 
     /**
      * Set Scheme
-     * @param scheme
+     * @param scheme schema
      */
     public void setScheme(String scheme) {
         this.scheme = scheme;
@@ -110,7 +110,7 @@ public class SignatureComponent {
 
     /**
      * Get Request Type
-     * @return request tyoe
+     * @return request type
      */
     public String getRequestTarget() {
         return requestTarget;
@@ -118,7 +118,7 @@ public class SignatureComponent {
 
     /**
      * Set Request Type
-     * @param requestTarget
+     * @param requestTarget request type
      */
     public void setRequestTarget(String requestTarget) {
         this.requestTarget = requestTarget;

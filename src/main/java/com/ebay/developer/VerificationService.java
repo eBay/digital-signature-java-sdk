@@ -59,11 +59,11 @@ public class VerificationService {
     /**
      * Verify all signature headers
      *
-     * @param body
-     * @param headers
-     * @param signatureConfig
-     * @return boolean
-     * @throws SignatureException
+     * @param body request body
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return boolean verification success
+     * @throws SignatureException signature exception
      */
     public boolean verification(String body, Map<String, String> headers,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -83,9 +83,9 @@ public class VerificationService {
     /**
      * Validate Content Digest
      *
-     * @param body
-     * @param headers
-     * @return isValid
+     * @param body request body
+     * @param headers request headers
+     * @return isValid Content digest validity
      */
     public boolean validateDigestHeader(String body,
         Map<String, String> headers) {
@@ -102,10 +102,10 @@ public class VerificationService {
     /**
      * Validate Signature Header
      *
-     * @param body
-     * @param headers
-     * @param signatureConfig
-     * @return isValid
+     * @param body request body
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return isValid signature header validity
      */
     public boolean validateSignatureHeader(String body, Map<String, String> headers,
         SignatureConfig signatureConfig) {
@@ -127,10 +127,10 @@ public class VerificationService {
     /**
      * Verify 'signature' header
      *
-     * @param publicKey
-     * @param base
-     * @param headers
-     * @throws SignatureException
+     * @param publicKey public key
+     * @param base base string
+     * @param headers request headers
+     * @throws SignatureException signature exception
      */
     public void verifySignature(PublicKey publicKey, String base,
         Map<String, String> headers) throws SignatureException {
@@ -181,9 +181,9 @@ public class VerificationService {
     /**
      * Verify Content Digest
      *
-     * @param body
-     * @param headers
-     * @throws SignatureException
+     * @param body request body
+     * @param headers request headers
+     * @throws SignatureException signature exception
      */
     public void verifyDigestHeader(String body, Map<String, String> headers)
         throws SignatureException {
@@ -225,10 +225,10 @@ public class VerificationService {
     /**
      * Verify JWT and return public key
      *
-     * @param headers
-     * @param signatureConfig
-     * @return publicKey
-     * @throws SignatureException
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return publicKey public key
+     * @throws SignatureException signature exception
      */
     PublicKey verifyJWT(Map<String, String> headers,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -257,9 +257,9 @@ public class VerificationService {
 
     /**
      * Get Encrypted JWT value from JWE
-     * @param jweString
-     * @return encryptedJWT
-     * @throws SignatureException
+     * @param jweString JWE string
+     * @return encryptedJWT encrypted JWT
+     * @throws SignatureException signature exception
      */
     EncryptedJWT decryptJWE(String jweString, SignatureConfig signatureConfig) throws SignatureException {
         try {
@@ -277,11 +277,11 @@ public class VerificationService {
     /**
      * Method to calculate base string value
      *
-     * @param body
-     * @param headers
-     * @param signatureConfig
-     * @return calculatedBase
-     * @throws SignatureException
+     * @param body request body
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return calculatedBase base string
+     * @throws SignatureException signature exception
      */
     String calculateBase(String body, Map<String, String> headers,
         SignatureConfig signatureConfig) throws SignatureException {

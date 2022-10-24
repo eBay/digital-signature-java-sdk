@@ -45,12 +45,12 @@ public class Signature {
     /**
      * Get Request signed
      *
-     * @param request
-     * @param response
-     * @param signatureConfig
-     * @return response
-     * @throws IOException
-     * @throws SignatureException
+     * @param request HTTP request
+     * @param response HTTP response
+     * @param signatureConfig signature config
+     * @return response HTTP response
+     * @throws IOException Input/Output exception
+     * @throws SignatureException signature exception
      */
     public HttpServletResponse getSignedRequest(HttpServletRequest request, HttpServletResponse response, SignatureConfig signatureConfig)
         throws IOException, SignatureException {
@@ -73,11 +73,11 @@ public class Signature {
     /**
      * Get Signature Object in response
      *
-     * @param body
-     * @param signatureConfig
+     * @param body request body
+     * @param signatureConfig signature config
      * @return signature headers
-     * @throws SignatureException
-     * @throws JsonProcessingException
+     * @throws SignatureException signature exception
+     * @throws JsonProcessingException Json processing exception
      */
     public String getSignatureJson(String body, SignatureConfig signatureConfig)
         throws SignatureException, JsonProcessingException {
@@ -126,10 +126,10 @@ public class Signature {
     /**
      * Generate Content digest
      *
-     * @param body
-     * @param signatureConfig
-     * @return contentDigest
-     * @throws SignatureException
+     * @param body request body
+     * @param signatureConfig signature config
+     * @return contentDigest content digest
+     * @throws SignatureException signature exception
      */
     public String generateDigestHeader(String body,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -139,10 +139,10 @@ public class Signature {
     /**
      * Get 'Signature' header value
      *
-     * @param headers
-     * @param signatureConfig
-     * @return signature
-     * @throws SignatureException
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return signature signature string
+     * @throws SignatureException signature exception
      */
     public String getSignature(Map<String, String> headers,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -152,9 +152,9 @@ public class Signature {
     /**
      * Generate Signature Key header
      *
-     * @param signatureConfig
-     * @return signatureKeyHeader
-     * @throws SignatureException
+     * @param signatureConfig signature config
+     * @return signatureKeyHeader signature key header
+     * @throws SignatureException signature exception
      */
     public String generateSignatureKey(SignatureConfig signatureConfig)
         throws SignatureException {
@@ -164,8 +164,9 @@ public class Signature {
     /**
      * Generate Signature Input header
      *
-     * @param signatureParams
-     * @return signatureInputHeader
+     * @param contentDigest content digest
+     * @param signatureParams signature params
+     * @return signatureInputHeader signature key header
      */
     public String generateSignatureInput(String contentDigest, List<String> signatureParams) {
         return "sig1="+signatureService.getSignatureInput(contentDigest, signatureParams);
@@ -174,11 +175,11 @@ public class Signature {
     /**
      * Verify all signature headers
      *
-     * @param body
-     * @param headers
-     * @param signatureConfig
-     * @return boolean
-     * @throws SignatureException
+     * @param body request body
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return boolean Signature validity
+     * @throws SignatureException signature exception
      */
     public boolean validateSignature(String body, Map<String, String> headers,
         SignatureConfig signatureConfig) throws SignatureException {
@@ -189,9 +190,9 @@ public class Signature {
     /**
      * Validate Content Digest
      *
-     * @param body
-     * @param headers
-     * @return boolean
+     * @param body response body
+     * @param headers response headers
+     * @return boolean content digest validity
      */
     public boolean validateDigestHeader(String body,
         Map<String, String> headers) {
@@ -201,10 +202,10 @@ public class Signature {
     /**
      * Validate Signature Header
      *
-     * @param body
-     * @param headers
-     * @param signatureConfig
-     * @return boolean
+     * @param body request body
+     * @param headers request headers
+     * @param signatureConfig signature config
+     * @return boolean Signature header validity
      */
     public boolean validateSignatureHeader(String body, Map<String, String> headers,
         SignatureConfig signatureConfig) {
@@ -215,8 +216,8 @@ public class Signature {
     /**
      * Load config value into SignatureConfig Object
      *
-     * @param configPath
-     * @return SignatureConfig
+     * @param configPath config path
+     * @return SignatureConfig signature config
      * @throws SignatureConfigException
      */
     private SignatureConfig loadSignatureConfig(String configPath)

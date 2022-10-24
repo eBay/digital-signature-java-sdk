@@ -186,8 +186,8 @@ public class SignatureConfig {
     /**
      * Get public key value as a file or as a string value
      *
-     * @return publicKey
-     * @throws SignatureException
+     * @return publicKey public key
+     * @throws SignatureException signature exception
      */
     public PublicKey getPublicKey() throws SignatureException {
         if (publicKey != null) {
@@ -212,8 +212,8 @@ public class SignatureConfig {
     /**
      * Get private key value as a file or as a string value
      *
-     * @return privateKey
-     * @throws SignatureException
+     * @return privateKey private key
+     * @throws SignatureException signature exception
      */
     public PrivateKey getPrivateKey() throws SignatureException {
         if (privateKey != null) {
@@ -238,9 +238,9 @@ public class SignatureConfig {
     /**
      * Extract Private key from reader(string or file)
      *
-     * @param reader
-     * @return privateKey
-     * @throws SignatureException
+     * @param reader IO reader
+     * @return privateKey private key
+     * @throws SignatureException signature exception
      */
     private PrivateKey getPrivate(Reader reader) throws SignatureException {
         try {
@@ -261,9 +261,9 @@ public class SignatureConfig {
     /**
      * Extract Public key from reader(string or file)
      *
-     * @param reader
-     * @return publicKey
-     * @throws SignatureException
+     * @param reader IO reader
+     * @return publicKey public key
+     * @throws SignatureException signature exception
      */
     private PublicKey getPublic(Reader reader) throws SignatureException {
         try {
