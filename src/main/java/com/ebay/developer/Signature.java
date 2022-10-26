@@ -42,6 +42,12 @@ public class Signature {
         verificationService = new VerificationService();
     }
 
+    public Signature(SignatureConfig signatureConfig) {
+        this.signatureConfig = signatureConfig;
+        signatureService = new SignatureService();
+        verificationService = new VerificationService();
+    }
+
     /**
      * Get Request signed
      *
