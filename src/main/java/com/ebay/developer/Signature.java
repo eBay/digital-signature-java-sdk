@@ -99,20 +99,18 @@ public class Signature {
                 .generateSignatureKeyHeader(signatureConfig);
         headers.put(X_EBAY_SIGNATURE_HEADER, xEbaySignatureKey);
 
-        String signature = signatureService
-                .getSignature(headers, signatureConfig);
-
         String signatureInput = SIGNATURE_INPUT_PREFIX + signatureService
                 .getSignatureInput(contentDigest, signatureConfig.getSignatureParams());
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode sign = mapper.createObjectNode();
         if (StringUtils.isNotBlank(contentDigest)) {
+            headers.put(CONTENT_DIGEST, contentDigest);
             sign.put(CONTENT_DIGEST_PARAM, contentDigest);
         }
         sign.put(X_EBAY_SIGNATURE_PARAM, xEbaySignatureKey);
         sign.put(SIGNATURE_INPUT_PARAM, signatureInput);
-        sign.put(SIGNATURE_PARAM, signature);
+        sign.put(SIGNATURE_PARAM, signatureService.getSignature(headers, signatureConfig));
 
         return mapper
                 .writerWithDefaultPrettyPrinter()
