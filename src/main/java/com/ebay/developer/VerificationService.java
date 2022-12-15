@@ -33,8 +33,6 @@ import org.bouncycastle.util.encoders.Base64;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -264,12 +262,12 @@ public class VerificationService {
     EncryptedJWT decryptJWE(String jweString, SignatureConfig signatureConfig) throws SignatureException {
         try {
             EncryptedJWT jwe = EncryptedJWT.parse(jweString);
-            String secretKeyBase64 = Files.readAllLines(Paths.get(signatureConfig.getMasterKey())).get(0);;
+            String secretKeyBase64 = signatureConfig.getMasterKey();
             final byte[] secretKey = Base64.decode(secretKeyBase64);
             JWEDecrypter jweDecrypter = new AESDecrypter(secretKey);
             jwe.decrypt(jweDecrypter);
             return jwe;
-        } catch (ParseException | JOSEException | IOException ex) {
+        } catch (ParseException | JOSEException ex) {
             throw new SignatureException("Error decrypting the JWE from x-ebay-signature-key header", ex);
         }
     }

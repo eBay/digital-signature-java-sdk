@@ -18,6 +18,7 @@
 package com.ebay.developer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
@@ -28,13 +29,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import static com.ebay.developer.Constants.*;
+
 public class Signature {
-    private SignatureConfig signatureConfig;
-    private SignatureService signatureService;
-    private VerificationService verificationService;
+    private final SignatureConfig signatureConfig;
+    private final SignatureService signatureService;
+    private final VerificationService verificationService;
 
     public Signature(String configPath) throws SignatureConfigException {
         signatureConfig = loadSignatureConfig(configPath);
@@ -42,31 +44,35 @@ public class Signature {
         verificationService = new VerificationService();
     }
 
+    public Signature(SignatureConfig signatureConfig) {
+        this.signatureConfig = signatureConfig;
+        signatureService = new SignatureService();
+        verificationService = new VerificationService();
+    }
+
     /**
      * Get Request signed
      *
-     * @param request HTTP request
+     * @param request  HTTP request
      * @param response HTTP response
-     * @param signatureConfig signature config
      * @return response HTTP response
-     * @throws IOException Input/Output exception
+     * @throws IOException        Input/Output exception
      * @throws SignatureException signature exception
      */
-    public HttpServletResponse getSignedRequest(HttpServletRequest request, HttpServletResponse response, SignatureConfig signatureConfig)
-        throws IOException, SignatureException {
+    public HttpServletResponse getSignedRequest(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, SignatureException {
         String body = IOUtils.toString(request.getReader());
-        String contentDigest = generateDigestHeader(body, signatureConfig);
-        String signatureKeyHeader = generateSignatureKey(signatureConfig);
+        String contentDigest = generateDigestHeader(body);
+        String signatureKeyHeader = generateSignatureKey();
         Map<String, String> headers = new HashMap<>();
-        if(StringUtils.isNotBlank(contentDigest)){
-            headers.put(Constants.CONTENT_DIGEST, contentDigest);
-            response.setHeader(Constants.CONTENT_DIGEST_HEADER, contentDigest);
+        if (StringUtils.isNotBlank(contentDigest)) {
+            headers.put(CONTENT_DIGEST, contentDigest);
+            response.setHeader(CONTENT_DIGEST_HEADER, contentDigest);
         }
-        headers.put(Constants.X_EBAY_SIGNATURE_HEADER, signatureKeyHeader);
-        response.setHeader(Constants.X_EBAY_SIGNATURE_HEADER, signatureKeyHeader);
-        response.setHeader(Constants.SIGNATURE_HEADER, getSignature(headers, signatureConfig));
-        response.setHeader(Constants.SIGNATURE_INPUT_HEADER, generateSignatureInput(contentDigest,
-            signatureConfig.getSignatureParams()));
+        headers.put(X_EBAY_SIGNATURE_HEADER, signatureKeyHeader);
+        response.setHeader(X_EBAY_SIGNATURE_HEADER, signatureKeyHeader);
+        response.setHeader(SIGNATURE_HEADER, getSignature(headers));
+        response.setHeader(SIGNATURE_INPUT_HEADER, generateSignatureInput(contentDigest));
         return response;
     }
 
@@ -74,44 +80,69 @@ public class Signature {
      * Get Signature Object in response
      *
      * @param body request body
-     * @param signatureConfig signature config
      * @return signature headers
-     * @throws SignatureException signature exception
+     * @throws SignatureException      signature exception
      * @throws JsonProcessingException Json processing exception
      */
-    public String getSignatureJson(String body, SignatureConfig signatureConfig)
-        throws SignatureException, JsonProcessingException {
+    public String getSignatureJson(String body)
+            throws SignatureException, JsonProcessingException {
 
         Map<String, String> headers = new HashMap<>();
         String contentDigest = signatureService
-            .generateContentDigest(body, signatureConfig);
-        if(StringUtils.isNotBlank(contentDigest)){
-            headers.put(Constants.CONTENT_DIGEST, contentDigest);
+                .generateContentDigest(body, signatureConfig);
+        if (StringUtils.isNotBlank(contentDigest)) {
+            headers.put(CONTENT_DIGEST, contentDigest);
         }
 
 
         String xEbaySignatureKey = signatureService
-            .generateSignatureKeyHeader(signatureConfig);
-        headers.put(Constants.X_EBAY_SIGNATURE_HEADER, xEbaySignatureKey);
+                .generateSignatureKeyHeader(signatureConfig);
+        headers.put(X_EBAY_SIGNATURE_HEADER, xEbaySignatureKey);
 
-        String signature = signatureService
-            .getSignature(headers, signatureConfig);
-
-        String signatureInput = Constants.SIGNATURE_INPUT_PREFIX + signatureService
-            .getSignatureInput(contentDigest, signatureConfig.getSignatureParams());
+        String signatureInput = SIGNATURE_INPUT_PREFIX + signatureService
+                .getSignatureInput(contentDigest, signatureConfig.getSignatureParams());
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode sign = mapper.createObjectNode();
-        if(StringUtils.isNotBlank(contentDigest)){
-            sign.put(Constants.CONTENT_DIGEST_PARAM, contentDigest);
+        if (StringUtils.isNotBlank(contentDigest)) {
+            headers.put(CONTENT_DIGEST, contentDigest);
+            sign.put(CONTENT_DIGEST_PARAM, contentDigest);
         }
-        sign.put(Constants.X_EBAY_SIGNATURE_PARAM, xEbaySignatureKey);
-        sign.put(Constants.SIGNATURE_INPUT_PARAM, signatureInput);
-        sign.put(Constants.SIGNATURE_PARAM, signature);
+        sign.put(X_EBAY_SIGNATURE_PARAM, xEbaySignatureKey);
+        sign.put(SIGNATURE_INPUT_PARAM, signatureInput);
+        sign.put(SIGNATURE_PARAM, signatureService.getSignature(headers, signatureConfig));
 
-        String signjson = mapper.writerWithDefaultPrettyPrinter()
-            .writeValueAsString(sign);
-        return signjson;
+        return mapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(sign);
+    }
+
+    /**
+     * Get Signature Header as Map
+     *
+     * @param body request body
+     * @return signature headers
+     * @throws SignatureException signature exception
+     */
+    public Map<String, String> getSignatureHeaderAsMap(String body)
+            throws SignatureException {
+
+        final Map<String, String> headers = new HashMap<>();
+        final String contentDigest = generateDigestHeader(body);
+        final String xEbaySignatureKey = generateSignatureKey();
+        headers.put(X_EBAY_SIGNATURE_HEADER.toLowerCase(), xEbaySignatureKey);
+
+        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectNode sign = mapper.createObjectNode();
+        if (StringUtils.isNotBlank(contentDigest)) {
+            headers.put(CONTENT_DIGEST.toLowerCase(), contentDigest);
+            sign.put(CONTENT_DIGEST_HEADER.toLowerCase(), contentDigest);
+        }
+        sign.put(X_EBAY_SIGNATURE_HEADER.toLowerCase(), xEbaySignatureKey);
+        sign.put(SIGNATURE_HEADER.toLowerCase(), getSignature(headers));
+        sign.put(SIGNATURE_INPUT_HEADER.toLowerCase(), generateSignatureInput(contentDigest));
+
+        return mapper.convertValue(sign, new TypeReference<HashMap<String,String>>(){});
     }
 
     /**
@@ -127,12 +158,10 @@ public class Signature {
      * Generate Content digest
      *
      * @param body request body
-     * @param signatureConfig signature config
      * @return contentDigest content digest
      * @throws SignatureException signature exception
      */
-    public String generateDigestHeader(String body,
-        SignatureConfig signatureConfig) throws SignatureException {
+    public String generateDigestHeader(String body) throws SignatureException {
         return signatureService.generateContentDigest(body, signatureConfig);
     }
 
@@ -140,24 +169,21 @@ public class Signature {
      * Get 'Signature' header value
      *
      * @param headers request headers
-     * @param signatureConfig signature config
      * @return signature signature string
      * @throws SignatureException signature exception
      */
-    public String getSignature(Map<String, String> headers,
-        SignatureConfig signatureConfig) throws SignatureException {
+    public String getSignature(Map<String, String> headers) throws SignatureException {
         return signatureService.getSignature(headers, signatureConfig);
     }
 
     /**
      * Generate Signature Key header
      *
-     * @param signatureConfig signature config
      * @return signatureKeyHeader signature key header
      * @throws SignatureException signature exception
      */
-    public String generateSignatureKey(SignatureConfig signatureConfig)
-        throws SignatureException {
+    public String generateSignatureKey()
+            throws SignatureException {
         return signatureService.generateSignatureKeyHeader(signatureConfig);
     }
 
@@ -165,24 +191,21 @@ public class Signature {
      * Generate Signature Input header
      *
      * @param contentDigest content digest
-     * @param signatureParams signature params
      * @return signatureInputHeader signature key header
      */
-    public String generateSignatureInput(String contentDigest, List<String> signatureParams) {
-        return "sig1="+signatureService.getSignatureInput(contentDigest, signatureParams);
+    public String generateSignatureInput(String contentDigest) {
+        return "sig1=" + signatureService.getSignatureInput(contentDigest, signatureConfig.getSignatureParams());
     }
 
     /**
      * Verify all signature headers
      *
-     * @param body request body
+     * @param body    request body
      * @param headers request headers
-     * @param signatureConfig signature config
      * @return boolean Signature validity
      * @throws SignatureException signature exception
      */
-    public boolean validateSignature(String body, Map<String, String> headers,
-        SignatureConfig signatureConfig) throws SignatureException {
+    public boolean validateSignature(String body, Map<String, String> headers) throws SignatureException {
 
         return verificationService.verification(body, headers, signatureConfig);
     }
@@ -190,27 +213,25 @@ public class Signature {
     /**
      * Validate Content Digest
      *
-     * @param body response body
+     * @param body    response body
      * @param headers response headers
      * @return boolean content digest validity
      */
     public boolean validateDigestHeader(String body,
-        Map<String, String> headers) {
+                                        Map<String, String> headers) {
         return verificationService.validateDigestHeader(body, headers);
     }
 
     /**
      * Validate Signature Header
      *
-     * @param body request body
+     * @param body    request body
      * @param headers request headers
-     * @param signatureConfig signature config
      * @return boolean Signature header validity
      */
-    public boolean validateSignatureHeader(String body, Map<String, String> headers,
-        SignatureConfig signatureConfig) {
+    public boolean validateSignatureHeader(String body, Map<String, String> headers) {
         return verificationService
-            .validateSignatureHeader(body, headers, signatureConfig);
+                .validateSignatureHeader(body, headers, signatureConfig);
     }
 
     /**
@@ -221,14 +242,14 @@ public class Signature {
      * @throws SignatureConfigException
      */
     private SignatureConfig loadSignatureConfig(String configPath)
-        throws SignatureConfigException {
-        SignatureConfig signatureConfig = null;
+            throws SignatureConfigException {
+        SignatureConfig signatureConfig;
         ObjectMapper mapper = new ObjectMapper();
 
         // convert JSON file to map
         try {
             signatureConfig = mapper.readValue(Paths.get(configPath).toFile(),
-                SignatureConfig.class);
+                    SignatureConfig.class);
             if (signatureConfig == null) {
                 throw new SignatureConfigException("Failed to map config fields");
             }
