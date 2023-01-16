@@ -10,9 +10,9 @@
   "jwtPayload": {
     "pkey": "MCowBQYDK2VwAyEAJrQLj5P/89iXES9+vFgrIy29clF9CC/oPPsw3c5D0bs="
   },
-  "masterKey": "uSA8lSm4fWRrDs8JvjS/Y6D5Ohp3mIKC4AhN/nBaGxs=",
-  "privateKey": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIJ+DYvh6SEqVTm50DFtMDoQikTmiCqirVv9mWG9qfSnF\n-----END PRIVATE KEY-----",
-  "publicKey": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAJrQLj5P/89iXES9+vFgrIy29clF9CC/oPPsw3c5D0bs=\n-----END PUBLIC KEY-----",
+  "masterKey": "./examples/keys/masterkey.key",
+  "privateKey": "./examples/keys/ed25519/privatekey.pem",
+  "publicKey": "./examples/keys/ed25519/publickey.pem",
   "signatureComponents": {
     "method": "POST",
     "authority": "localhost:8080",

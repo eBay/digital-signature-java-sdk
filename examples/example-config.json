@@ -1,7 +1,7 @@
 {
   "digestAlgorithm": "sha-256",
   "algorithm": "Ed25519",
-  "privateKey": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIJ+DYvh6SEqVTm50DFtMDoQikTmiCqirVv9mWG9qfSnF\n-----END PRIVATE KEY-----",
+  "privateKey": "./keys/ed25519/privatekey.pem",
   "jwe": "eyJhbGciOiJBMjU2R0NNS1ciLCJlbmMiOiJBMjU2R0NNIiwiemlwIjoiREVGIiwiaXYiOiIzaE4yVElWOGNpcnFlbkFFIiwidGFnIjoiRU5pNnh3VTRpQlNFdFlKSWxXLTFzZyJ9.iCr0uh3U5-9HhbN9ieeOY8aMbTEemQw8-LWkaWNZ0KM.8VD3RAlDFrroF_vz.CPLqXgKdWIUZflkqFx00odfHbkR48AwvVvk5s8aZPYp1cKlWS2fstfhFgQDKHgvZN3onc5Bn4hbk_frexCUrLcOxOd8ga2zU_3PB1VWLV_CHizoqwLkMzdDkymzSGKKGt3kCFknfqbQkQFjY0iUc.RomdXeeOtVhzb9gUMlWnsg",
   "signatureComponents": {
     "method": "POST",

@@ -61,7 +61,7 @@ Adding dependency:
 <dependency>
     <groupId>com.ebay.developer</groupId>
     <artifactId>digital-signature-sdk</artifactId>
-  <version>1.0.0-RELEASE</version>
+  <version>1.1.0-RELEASE</version>
 </dependency>
 ```
 

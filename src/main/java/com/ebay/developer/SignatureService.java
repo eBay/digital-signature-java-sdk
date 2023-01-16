@@ -33,6 +33,8 @@ import org.bouncycastle.util.encoders.Base64;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.Date;
@@ -184,7 +186,7 @@ public class SignatureService {
                 .compressionAlgorithm(new CompressionAlgorithm(signatureConfig.getJweHeadersParam().getZip()))
                 .build();
 
-            String secretKeyBase64 = signatureConfig.getMasterKey();
+            String secretKeyBase64 = Files.readAllLines(Paths.get(signatureConfig.getMasterKey())).get(0);
             final byte[] secretKey = Base64.decode(secretKeyBase64);
             JWEEncrypter jweEncrypter = new AESEncrypter(secretKey);
 
@@ -198,7 +200,7 @@ public class SignatureService {
             String jwtString = jwt.serialize();
 
             return jwtString;
-        } catch (JOSEException ex) {
+        } catch (JOSEException | IOException ex) {
             throw new SignatureException("Error creating JWE: " + ex.getMessage(), ex);
         }
 
