@@ -264,7 +264,7 @@ public class VerificationService {
     EncryptedJWT decryptJWE(String jweString, SignatureConfig signatureConfig) throws SignatureException {
         try {
             EncryptedJWT jwe = EncryptedJWT.parse(jweString);
-            String secretKeyBase64 = Files.readAllLines(Paths.get(signatureConfig.getMasterKey())).get(0);;
+            String secretKeyBase64 = Files.readAllLines(Paths.get(signatureConfig.getMasterKey())).get(0);
             final byte[] secretKey = Base64.decode(secretKeyBase64);
             JWEDecrypter jweDecrypter = new AESDecrypter(secretKey);
             jwe.decrypt(jweDecrypter);

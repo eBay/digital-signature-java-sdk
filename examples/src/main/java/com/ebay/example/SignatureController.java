@@ -70,7 +70,7 @@ public class SignatureController {
         HttpServletResponse signatureObjectResponse = null;
         try {
             signatureObjectResponse = signature
-                .getSignedRequest(request, response, signature.getSignatureConfig());
+                .getSignedRequest(request, response);
         } catch (SignatureException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest()
@@ -97,19 +97,18 @@ public class SignatureController {
         try {
             String body = IOUtils.toString(request.getReader());
             String contentDigest = signatureFull
-                .generateDigestHeader(body, signatureFull.getSignatureConfig());
+                .generateDigestHeader(body);
             String xEbaySignatureKey = signatureFull
-                .generateSignatureKey(signatureFull.getSignatureConfig());
+                .generateSignatureKey();
             Map<String, String> headers = new HashMap<>();
             if(StringUtils.isNotBlank(contentDigest)){
                 headers.put("content-digest", contentDigest);
             }
             headers.put("x-ebay-signature-key", xEbaySignatureKey);
             String signatureStr =  signatureFull
-                .getSignature(headers, signatureFull.getSignatureConfig());
+                .getSignature(headers);
             String signatureInput =  signatureFull
-                .generateSignatureInput(headers.get("content-digest"),
-                    signatureFull.getSignatureConfig().getSignatureParams());
+                .generateSignatureInput(headers.get("content-digest"));
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode sign = mapper.createObjectNode();
             if(StringUtils.isNotBlank(contentDigest)){
@@ -143,8 +142,7 @@ public class SignatureController {
         boolean isSuccess = false;
         try {
             String body = IOUtils.toString(request.getReader());
-            isSuccess = signatureFull.validateSignature(body, headers,
-                signatureFull.getSignatureConfig());
+            isSuccess = signatureFull.validateSignature(body, headers);
             if (isSuccess) {
                 return ResponseEntity.accepted().build();
             } else {
@@ -178,8 +176,7 @@ public class SignatureController {
         }
         boolean isContentDigestValid = signatureFull
             .validateDigestHeader(body, headers);
-        boolean isSignaturHeaderValid = signatureFull.validateSignatureHeader(body, headers,
-            signatureFull.getSignatureConfig());
+        boolean isSignaturHeaderValid = signatureFull.validateSignatureHeader(body, headers);
         if (isContentDigestValid && isSignaturHeaderValid) {
             return ResponseEntity.accepted().build();
         } else {

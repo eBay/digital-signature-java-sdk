@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ebay.developer</groupId>
 	<artifactId>digital-signature-sdk-example</artifactId>
-	<version>1.0.0-RELEASE</version>
+	<version>1.1.0-RELEASE</version>
 	<name>digital-signature-sdk-example</name>
 	<description>Sample project for Digital Signature</description>
 	<properties>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.ebay.developer</groupId>
 			<artifactId>digital-signature-sdk</artifactId>
-			<version>1.0.0-RELEASE</version>
+			<version>1.1.0-RELEASE</version>
 		</dependency>
     </dependencies>
 

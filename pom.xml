@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ebay.developer</groupId>
     <artifactId>digital-signature-sdk</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.1.0-RELEASE</version>
     <name>digital-signature-sdk</name>
     <description>Java SDK to generate and validate digital signatures</description>
     <url>https://github.com/eBay/digital-signature-java-sdk</url>
